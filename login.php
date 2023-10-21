@@ -25,7 +25,20 @@ if (isset($_POST['Login'])) {
         }
     }
     if(empty($error)){
+        $login_id = $r1['login_id'];
+        $sql1 = "select * from admin_access where login_id = '$login_id'";
+        $q1 = mysqli_query($connection, $sql1);
+        while ($r1 = mysqli_fetch_array($q1)){
+            $access[] = $r1['access_id']; //baca role admin, guru, siswa
+        }
+        if(empty($access)){
+            $error .= "<li>You don't have an access to admin page!</li>";
+        }
+    }
+
+    if(empty($error)){
         $_SESSION['admin_username'] = $username;
+        $_SESSION['admin_access'] = $access;
         header("location:admin_depan.php");
         exit();
     }
